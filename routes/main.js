@@ -16,14 +16,20 @@ router.post("/retrieveData",function(req,res,next){
 */
     mongoClient.connect(url,function(err,db){
         if (!err){
-            db.collection("first").insertOne({latitude:req.body.latitude,longitude:req.body.longitude,info:"whywhywhy"},function(err,result){
-                db.collection("first").find({}).toArray(function(err,arDocs){
-                    var sRslt=JSON.stringify(arDocs);
-                    db.close();
-                    res.send(sRslt);
-                });
-            })
-    }
+          db.collection("neighberhoods").find({
+            location:{
+              $near:{
+                $geometry:{type:"Point",coordinates:[parseFloat(req.body.longitude),parseFloat(req.body.latitude)]},
+                $minDistance:0,
+                $maxDistance:100
+              }
+            }
+          }).toArray(function(err,arDocs){
+              var sRslt=JSON.stringify(arDocs);
+              db.close();
+              res.send(sRslt);
+          });
+        }
         else
         {
             console.log ("error in retrieveData - " + err.message);
@@ -46,7 +52,7 @@ router.post("/insertData",function(req,res,next){
                 else{
                     console.log ("error when inserting record")
                 }
-            
+
             })
         }
         else
