@@ -11,7 +11,7 @@ $(document).ready(function(){
 function sendLocationDataForSearch(oPosition){
     var oData={latitude:oPosition.coords.latitude,longitude:oPosition.coords.longitude};
     $.ajax({url:"../retrieveData",
-          method:"post",
+          method:"get",
           data:oData,
            error:function(oErr,sErr){
               alert ("err in retrieve data.err = "+oErr.responseText)
@@ -25,7 +25,7 @@ function sendLocationDataForAdd(oPosition){
     var sInfo=$("#eContent").val();
     var oData={latitude:oPosition.coords.latitude,longitude:oPosition.coords.longitude,info:sInfo};
     $.ajax({url:"../insertData",
-          method:"post",
+          method:"get",
           data:oData,
            error:function(oErr,sErr){
               alert ("err in insert data.err = "+oErr.responseText)
