@@ -9,10 +9,11 @@ $(document).ready(function(){
 })
 
 function sendLocationDataForSearch(oPosition){
-    var oData={latitude:oPosition.coords.latitude,longitude:oPosition.coords.longitude};
+//    var oData={latitude:oPosition.coords.latitude,longitude:oPosition.coords.longitude};
+    var sData="latitude="+oPosition.coords.latitude+"&longitude="+oPosition.coords.longitude;
     $.ajax({url:"../retrieveData",
           method:"get",
-          data:oData,
+          data:sData,
            error:function(oErr,sErr){
               alert ("err in retrieve data.err = "+oErr.responseText)
            },
@@ -23,10 +24,11 @@ function sendLocationDataForSearch(oPosition){
 }
 function sendLocationDataForAdd(oPosition){
     var sInfo=$("#eContent").val();
-    var oData={latitude:oPosition.coords.latitude,longitude:oPosition.coords.longitude,info:sInfo};
+//    var oData={latitude:oPosition.coords.latitude,longitude:oPosition.coords.longitude,info:sInfo};
+    var sData="latitude="+oPosition.coords.latitude+"&longitude="+oPosition.coords.longitude;
     $.ajax({url:"../insertData",
           method:"get",
-          data:oData,
+          data:sData,
            error:function(oErr,sErr){
               alert ("err in insert data.err = "+oErr.responseText)
            },

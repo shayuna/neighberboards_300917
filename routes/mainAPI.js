@@ -45,7 +45,7 @@ router.get("/insertData",function(req,res,next){
 */
     mongoClient.connect(url,function(err,db){
         if (!err){
-            db.collection("neighberhoods").insert({location:{type:"Point",coordinates:[parseFloat(req.query.longitude),parseFloat(req.query.latitude)]},info:req.query.info},function(err,result){
+            db.collection("neighberhoods").insert({location:{type:"Point",coordinates:[parseFloat(req.query.longitude),parseFloat(req.query.latitude)]},info:req.query.info,tel:req.query.tel,$currentDate:{creationDate:true}},function(err,result){
                 if (!err){
                     db.collection("neighberhoods").createIndex({location:"2dsphere"});
                     console.log ("record inserted successfully hooray");
