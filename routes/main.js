@@ -1,8 +1,8 @@
 var express=require("express");
 var router=express.Router();
 var mongoClient=require("mongodb").MongoClient;
-var url="mongodb://shark:dbmonro@ds119355.mlab.com:19355/globe";
-//var url="mongodb://localhost:27017/globe";
+//var url="mongodb://shark:dbmonro@ds119355.mlab.com:19355/globe";
+var url="mongodb://localhost:27017/globe";
 
 
 router.get("/",function(req,res,next){

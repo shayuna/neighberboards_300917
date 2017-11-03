@@ -17,6 +17,7 @@ router.get("/retrieveData",function(req,res,next){
 */
     mongoClient.connect(url,function(err,db){
         if (!err){
+//        db.collection("neighberhoods").remove();
           db.collection("neighberhoods").find({
             location:{
               $near:{
