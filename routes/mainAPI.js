@@ -46,7 +46,7 @@ router.get("/insertData",function(req,res,next){
 */
     mongoClient.connect(url,function(err,db){
         if (!err){
-            db.collection("neighberhoods").insert({location:{type:"Point",coordinates:[parseFloat(req.query.longitude),parseFloat(req.query.latitude)]},info:req.query.info,tel:req.query.tel,$currentDate:{creationDate:true}},function(err,result){
+            db.collection("neighberhoods").insert({location:{type:"Point",coordinates:[parseFloat(req.query.longitude),parseFloat(req.query.latitude)]},info:req.query.info,tel:req.query.tel,dt:new Date()},function(err,result){
                 if (!err){
                     db.collection("neighberhoods").createIndex({location:"2dsphere"});
                     console.log ("record inserted successfully hooray");
@@ -61,6 +61,18 @@ router.get("/insertData",function(req,res,next){
         else
         {
             console.log ("error in insertData - " + err.message);
+        }
+    })
+})
+router.get("/removeAll",function(req,res,next){
+    mongoClient.connect(url,function(err,db){
+        if (!err){
+            db.collection("neighberhoods").remove({});
+            res.send("removed all. hooray");
+        }
+        else
+        {
+            console.log ("error in removeAll - " + err.message);
         }
     })
 })
