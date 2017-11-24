@@ -2,3 +2,6 @@
     margin:1em;
     display:block;
 }
+.hideMe{
+    display:none;
+}

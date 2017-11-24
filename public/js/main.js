@@ -25,6 +25,13 @@ function sendLocationDataForSearch(oPosition){
 function sendLocationDataForAdd(oPosition){
     var sInfo=$("#eContent").val();
 //    var oData={latitude:oPosition.coords.latitude,longitude:oPosition.coords.longitude,info:sInfo};
+    $("#eLatitude").val(oPosition.coords.latitude);
+    $("#eLongitude").val(oPosition.coords.longitude);
+    $("#eForm").submit();
+}
+function sendLocationDataForAdd_old(oPosition){
+    var sInfo=$("#eContent").val();
+//    var oData={latitude:oPosition.coords.latitude,longitude:oPosition.coords.longitude,info:sInfo};
     var sData="latitude="+oPosition.coords.latitude+"&longitude="+oPosition.coords.longitude;
     $.ajax({url:"../insertData",
           method:"get",

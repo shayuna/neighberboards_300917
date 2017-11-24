@@ -38,6 +38,12 @@ router.get("/retrieveData",function(req,res,next){
         }
     })
 })
+router.post("/insertData",function(req,res,next){
+    console.log ("latitude1="+req.body.latitude);
+//    res.end ("there will be happier times when i'll learn to decipher post maneuvers, i promise");
+});
+
+
 
 router.get("/insertData",function(req,res,next){
 /*
@@ -46,10 +52,11 @@ router.get("/insertData",function(req,res,next){
 */
     mongoClient.connect(url,function(err,db){
         if (!err){
-            db.collection("neighberhoods").insert({location:{type:"Point",coordinates:[parseFloat(req.query.longitude),parseFloat(req.query.latitude)]},info:req.query.info,tel:req.query.tel,dt:new Date()},function(err,result){
+            var objToInsert={location:{type:"Point",coordinates:[parseFloat(req.query.longitude),parseFloat(req.query.latitude)]},info:req.query.info,tel:req.query.tel,dt:new Date()};
+            db.collection("neighberhoods").insert(objToInsert,function(err,result){
                 if (!err){
                     db.collection("neighberhoods").createIndex({location:"2dsphere"});
-                    console.log ("record inserted successfully hooray");
+                    console.log ("record inserted successfully hooray. inserted obj id = "+objToInsert._id);
                     res.send("we did it. without you it wasn't possible");
                 }
                 else{

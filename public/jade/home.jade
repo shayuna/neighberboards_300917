@@ -5,8 +5,14 @@ html
         meta(charset="utf-8")
         script(src="./public/js/vendors/jquery-3.2.1.min.js")
         script(src="./public/js/main.js?v=1")
+        link(rel="stylesheet",href="./public/css/style.css")
     body
+        form#eForm(method="post",action="./insertData",target="eIframe",enctype="multipart/form-data")
+            textarea#eContent(name="content",placeholder="מה יש לך בשבילנו היום ?")
+            input#eFile(name="file",type="file")
+            input#eLatitude(name="latitude",type="hidden")
+            input#eLongitude(name="longitude",type="hidden")
         input#bSearch(type="button",value="סייר בשכונה")
         input#bAdd(type="button",value="הוסף אטרקציה")
-        textarea#eContent(placeholder="מה יש לך בשבילנו היום ?")
+        iframe#eIframe(name="eIframe",class="hideMe")
         
