@@ -22,25 +22,28 @@ function sendLocationDataForSearch(oPosition){
            }
       })  
 }
-function sendLocationDataForAdd(oPosition){
+function sendLocationDataForAdd_test(oPosition){
     var sInfo=$("#eContent").val();
 //    var oData={latitude:oPosition.coords.latitude,longitude:oPosition.coords.longitude,info:sInfo};
     $("#eLatitude").val(oPosition.coords.latitude);
     $("#eLongitude").val(oPosition.coords.longitude);
     $("#eForm").submit();
 }
-function sendLocationDataForAdd_old(oPosition){
+function sendLocationDataForAdd(oPosition){
     var sInfo=$("#eContent").val();
 //    var oData={latitude:oPosition.coords.latitude,longitude:oPosition.coords.longitude,info:sInfo};
-    var sData="latitude="+oPosition.coords.latitude+"&longitude="+oPosition.coords.longitude;
+    var oData={latitude:oPosition.coords.latitude,longitude:oPosition.coords.longitude,info:sInfo};
     $.ajax({url:"../insertData",
-          method:"get",
-          data:sData,
+          method:"post",
+          data:oData,
            error:function(oErr,sErr){
               alert ("err in insert data.err = "+oErr.responseText)
            },
            success:function(sData){
-               alert (sData);
+               if ($("#eFile").val()){
+                    $("#eForm").attr("action","./uploadImg?nm="+sData);
+                    $("#eForm") .submit();
+               }
            }
       })  
 }

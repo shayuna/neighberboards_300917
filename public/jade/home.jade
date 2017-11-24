@@ -8,10 +8,8 @@ html
         link(rel="stylesheet",href="./public/css/style.css")
     body
         form#eForm(method="post",action="./insertData",target="eIframe",enctype="multipart/form-data")
-            textarea#eContent(name="content",placeholder="מה יש לך בשבילנו היום ?")
             input#eFile(name="file",type="file")
-            input#eLatitude(name="latitude",type="hidden")
-            input#eLongitude(name="longitude",type="hidden")
+        textarea#eContent(name="content",placeholder="מה יש לך בשבילנו היום ?")
         input#bSearch(type="button",value="סייר בשכונה")
         input#bAdd(type="button",value="הוסף אטרקציה")
         iframe#eIframe(name="eIframe",class="hideMe")

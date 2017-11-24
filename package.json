@@ -4,14 +4,15 @@
   "description": "beta",
   "main": "app.js",
   "scripts": {
-	"start":"node app.js",
-	"test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "shay",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.1",
+    "express-fileupload": "^0.3.0",
     "jade": "^1.11.0",
     "mongodb": "^2.2.31",
     "path": "^0.12.7"

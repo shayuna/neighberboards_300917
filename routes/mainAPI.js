@@ -38,12 +38,37 @@ router.get("/retrieveData",function(req,res,next){
         }
     })
 })
-router.post("/insertData",function(req,res,next){
-    console.log ("latitude1="+req.body.latitude);
-//    res.end ("there will be happier times when i'll learn to decipher post maneuvers, i promise");
+router.post("/uploadImg",function(req,res,next){
+    let fl = req.files.file;
+    fl.mv(__dirname + "/../public/imgs/"+req.query.nm+".jpg");
+    console.log("the img nm should be - "+req.query.nm);
 });
+router.post("/insertData",function(req,res,next){
+/*
+    console.log("in retrieve data");
+    res.send(JSON.stringify({latitude:req.body.latitude,longitude:req.body.longitude,info:req.body.info}));
+*/
+    mongoClient.connect(url,function(err,db){
+        if (!err){
+            var objToInsert={location:{type:"Point",coordinates:[parseFloat(req.body.longitude),parseFloat(req.body.latitude)]},info:req.body.info,tel:req.body.tel,dt:new Date()};
+            db.collection("neighberhoods").insert(objToInsert,function(err,result){
+                if (!err){
+                    db.collection("neighberhoods").createIndex({location:"2dsphere"});
+                    console.log ("record inserted successfully hooray. inserted obj id = "+objToInsert._id);
+                    res.send(objToInsert._id);
+                }
+                else{
+                    console.log ("error when inserting record")
+                }
 
-
+            })
+        }
+        else
+        {
+            console.log ("error in insertData - " + err.message);
+        }
+    })
+})
 
 router.get("/insertData",function(req,res,next){
 /*
