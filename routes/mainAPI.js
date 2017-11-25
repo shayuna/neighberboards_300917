@@ -28,10 +28,10 @@ router.post('/uploadImg', multer.single('fl'), (req, res, next) => {
     res.status(400).send('No file uploaded.bummer');
     return;
   }
-  console.log ("passed this one");
+  console.log ("ok. this is is behind us");
 
   // Create a new blob in the bucket and upload the file data.
-  const blob = bucket.file(req.files.fl);
+  const blob = bucket.file(req.query.nm+".jpg");
   const blobStream = blob.createWriteStream();
 
   blobStream.on('error', (err) => {
