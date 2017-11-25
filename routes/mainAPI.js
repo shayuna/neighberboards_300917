@@ -22,12 +22,12 @@ var bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
 // Process the file upload and upload to Google Cloud Storage.
 router.post('/uploadImg', multer.single('file'), (req, res, next) => {
   if (!req.file) {
-    res.status(400).send('No file uploaded.');
+    res.status(400).send('No file uploaded123.');
     return;
   }
 
   // Create a new blob in the bucket and upload the file data.
-  const blob = bucket.file(req.file.originalname);
+  const blob = bucket.file(req.file.fl);
   const blobStream = blob.createWriteStream();
 
   blobStream.on('error', (err) => {
