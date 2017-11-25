@@ -63,7 +63,7 @@ router.post('/uploadImg', multer.single('fl'), (req, res, next) => {
 });
 
 function getPublicUrl (filename) {
-  return `https://storage.googleapis.com/${CLOUD_BUCKET}/${filename}`;
+  return `https://storage.googleapis.com/${GCLOUD_STORAGE_BUCKET}/${filename}`;
 }
 
 router.get("/",function(req,res,next){
