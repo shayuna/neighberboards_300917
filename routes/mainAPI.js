@@ -30,9 +30,14 @@ router.post('/uploadImg', multer.single('fl'), (req, res, next) => {
   }
   console.log ("ok. this is is behind us");
 
+  var sFlNm=req.query.nm+".jpg";
   // Create a new blob in the bucket and upload the file data.
-  const blob = bucket.file(req.query.nm+".jpg");
-  const blobStream = blob.createWriteStream();
+  const blob = bucket.file(sFlNm);
+  const blobStream = blob.createWriteStream({
+    metadata: {
+      contentType: req.files.fl.mimetype
+    }
+  });
 
   blobStream.on('error', (err) => {
     next(err);
@@ -40,8 +45,16 @@ router.post('/uploadImg', multer.single('fl'), (req, res, next) => {
 
   blobStream.on('finish', () => {
     // The public URL can be used to directly access the file via HTTP.
-    const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
-    res.status(200).send(publicUrl);
+//    const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
+//    res.status(200).send(publicUrl);
+  req.files.fl.cloudStorageObject = sFlNm;
+    blob.makePublic().then(() => {
+      req.files.fl.cloudStoragePublicUrl = getPublicUrl(sFlNm);
+      next();
+    });
+
+
+
   });
 
   blobStream.end(req.files.fl.buffer);
@@ -49,6 +62,9 @@ router.post('/uploadImg', multer.single('fl'), (req, res, next) => {
   console.log("file name should be - "+req.query.nm);
 });
 
+function getPublicUrl (filename) {
+  return `https://storage.googleapis.com/${CLOUD_BUCKET}/${filename}`;
+}
 
 router.get("/",function(req,res,next){
     console.log("the show is on");
