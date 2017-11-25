@@ -9,7 +9,7 @@ var Storage=require("@google-cloud/storage");
 
 var storage=Storage();
 
-var upload = Multer({dest:"/home/shaic2206/imgs"});
+var upload = Multer({dest:"/users/shay/img_test"});
 
 var multer = Multer({
   storage: Multer.memoryStorage(),
@@ -22,22 +22,16 @@ var multer = Multer({
 var bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
 
 
-router.post('/uploadImg', upload.any(), function(req, res, next) {
-  console.log(req.body, 'Body');
-  console.log(req.files, 'files');
-  res.end();
-});
-
-
 // Process the file upload and upload to Google Cloud Storage.
-router.post('/uploadImg_2', multer.single('fl'), (req, res, next) => {
-  if (!req.file) {
-    res.status(400).send('No file uploaded12345.');
+router.post('/uploadImg', multer.single('fl'), (req, res, next) => {
+  if (!req.files.fl) {
+    res.status(400).send('No file uploaded.bummer');
     return;
   }
+  console.log ("passed this one");
 
   // Create a new blob in the bucket and upload the file data.
-  const blob = bucket.file(req.file.fl);
+  const blob = bucket.file(req.files.fl);
   const blobStream = blob.createWriteStream();
 
   blobStream.on('error', (err) => {
@@ -50,7 +44,7 @@ router.post('/uploadImg_2', multer.single('fl'), (req, res, next) => {
     res.status(200).send(publicUrl);
   });
 
-  blobStream.end(req.file.buffer);
+  blobStream.end(req.files.fl.buffer);
 
   console.log("file name should be - "+req.query.nm);
 });
