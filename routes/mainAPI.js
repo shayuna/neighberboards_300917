@@ -1,13 +1,16 @@
 var express=require("express");
 var router=express.Router();
 var mongoClient=require("mongodb").MongoClient;
+var path=require("path");
 var url="mongodb://shark:dbmonro@ds119355.mlab.com:19355/globe";
 //var url="mongodb://localhost:27017/globe";
 
 
 router.get("/",function(req,res,next){
-    console.log("in empty get");
+    console.log("the show is on");
     res.render("../public/jade/home.jade");
+    console.log("the __dirname name env contains - "+path.resolve(__dirname));
+    console.log("the __filename env contains - "+path.resolve(__filename));
 })
 
 router.get("/retrieveData",function(req,res,next){
@@ -40,7 +43,7 @@ router.get("/retrieveData",function(req,res,next){
 })
 router.post("/uploadImg",function(req,res,next){
     let fl = req.files.file;
-    fl.mv(__dirname + "/../public/imgs/"+req.query.nm+".jpg");
+    fl.mv(path.resolve(__dirname,"../public/imgs/"+req.query.nm+".jpg"));
     console.log("the img nm should be - "+req.query.nm);
 });
 router.post("/insertData",function(req,res,next){
