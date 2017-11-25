@@ -9,6 +9,8 @@ var Storage=require("@google-cloud/storage");
 
 var storage=Storage();
 
+var upload = Multer({dest:"/home/shaic2206/imgs"});
+
 var multer = Multer({
   storage: Multer.memoryStorage(),
   limits: {
@@ -19,10 +21,18 @@ var multer = Multer({
 // A bucket is a container for objects (files).
 var bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
 
+
+router.post('/uploadImg', upload.any(), function(req, res, next) {
+  console.log(req.body, 'Body');
+  console.log(req.files, 'files');
+  res.end();
+});
+
+
 // Process the file upload and upload to Google Cloud Storage.
-router.post('/uploadImg', multer.single('file'), (req, res, next) => {
+router.post('/uploadImg_2', multer.single('fl'), (req, res, next) => {
   if (!req.file) {
-    res.status(400).send('No file uploaded123.');
+    res.status(400).send('No file uploaded12345.');
     return;
   }
 
@@ -82,7 +92,7 @@ router.get("/retrieveData",function(req,res,next){
         }
     })
 })
-router.post("/uploadImgOld",function(req,res,next){
+router.post("/uploadImg_1",function(req,res,next){
     let fl = req.files.file;
 //    fl.mv(path.resolve(__dirname,"../public/imgs/"+req.query.nm+".jpg"));
     fl.mv(path.resolve("../public/imgs",req.query.nm+".jpg"));
