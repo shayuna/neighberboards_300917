@@ -9,8 +9,8 @@ var url="mongodb://shark:dbmonro@ds119355.mlab.com:19355/globe";
 router.get("/",function(req,res,next){
     console.log("the show is on");
     res.render("../public/jade/home.jade");
-    console.log("the __dirname name env contains - "+path.resolve(__dirname));
-    console.log("the __filename env contains - "+path.resolve(__filename));
+//    console.log("the __dirname name env contains - "+path.resolve(__dirname));
+//    console.log("the __filename env contains - "+path.resolve(__filename));
 })
 
 router.get("/retrieveData",function(req,res,next){
@@ -43,7 +43,8 @@ router.get("/retrieveData",function(req,res,next){
 })
 router.post("/uploadImg",function(req,res,next){
     let fl = req.files.file;
-    fl.mv(path.resolve(__dirname,"../public/imgs/"+req.query.nm+".jpg"));
+//    fl.mv(path.resolve(__dirname,"../public/imgs/"+req.query.nm+".jpg"));
+    fl.mv("/public/imgs/"+req.query.nm+".jpg");
     console.log("the img nm should be - "+req.query.nm);
 });
 router.post("/insertData",function(req,res,next){
