@@ -3,7 +3,47 @@ var router=express.Router();
 var mongoClient=require("mongodb").MongoClient;
 var path=require("path");
 var url="mongodb://shark:dbmonro@ds119355.mlab.com:19355/globe";
+var Multer=require("multer");
+var Storage=require("@google-cloud/storage");
 //var url="mongodb://localhost:27017/globe";
+
+var storage=Storage();
+
+var multer = Multer({
+  storage: Multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024 // no larger than 5mb, you can change as needed.
+  }
+});
+
+// A bucket is a container for objects (files).
+var bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
+
+// Process the file upload and upload to Google Cloud Storage.
+router.post('/uploadImg', multer.single('file'), (req, res, next) => {
+  if (!req.file) {
+    res.status(400).send('No file uploaded.');
+    return;
+  }
+
+  // Create a new blob in the bucket and upload the file data.
+  const blob = bucket.file(req.file.originalname);
+  const blobStream = blob.createWriteStream();
+
+  blobStream.on('error', (err) => {
+    next(err);
+  });
+
+  blobStream.on('finish', () => {
+    // The public URL can be used to directly access the file via HTTP.
+    const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
+    res.status(200).send(publicUrl);
+  });
+
+  blobStream.end(req.file.buffer);
+
+  console.log("file name should be - "+req.query.nm);
+});
 
 
 router.get("/",function(req,res,next){
@@ -42,7 +82,7 @@ router.get("/retrieveData",function(req,res,next){
         }
     })
 })
-router.post("/uploadImg",function(req,res,next){
+router.post("/uploadImgOld",function(req,res,next){
     let fl = req.files.file;
 //    fl.mv(path.resolve(__dirname,"../public/imgs/"+req.query.nm+".jpg"));
     fl.mv(path.resolve("../public/imgs",req.query.nm+".jpg"));
