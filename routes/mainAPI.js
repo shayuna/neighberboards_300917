@@ -3,28 +3,42 @@ var router=express.Router();
 var mongoClient=require("mongodb").MongoClient;
 var path=require("path");
 var url="mongodb://shark:dbmonro@ds119355.mlab.com:19355/globe";
+var multer=require("multer");
+//var upload = multer({ dest: '/users/shay/img_test' })
+/*
+var upload = multer();
+
+
+router.post("/uploadImg",upload.single("fl"),function(req,res,next){
+    if (!req.file){
+        console.log ("there isn't any file here");
+    }
+    else{
+        console.log ("there is a file");
+    }
+})
+*/
+
 var Multer=require("multer");
 var Storage=require("@google-cloud/storage");
-//var url="mongodb://localhost:27017/globe";
 
 var storage=Storage();
 
-var upload = Multer({dest:"/users/shay/img_test"});
-
+/*
 var multer = Multer({
   storage: Multer.memoryStorage(),
   limits: {
     fileSize: 5 * 1024 * 1024 // no larger than 5mb, you can change as needed.
   }
 });
-
+*/
 // A bucket is a container for objects (files).
 var bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
 
 
 // Process the file upload and upload to Google Cloud Storage.
 router.post('/uploadImg', multer.single('fl'), (req, res, next) => {
-  if (!req.files.fl) {
+  if (!req.file) {
     res.status(400).send('No file uploaded.bummer');
     return;
   }
@@ -35,7 +49,7 @@ router.post('/uploadImg', multer.single('fl'), (req, res, next) => {
   const blob = bucket.file(sFlNm);
   const blobStream = blob.createWriteStream({
     metadata: {
-      contentType: req.files.fl.mimetype
+      contentType: req.file.mimetype
     }
   });
 
@@ -47,9 +61,9 @@ router.post('/uploadImg', multer.single('fl'), (req, res, next) => {
     // The public URL can be used to directly access the file via HTTP.
 //    const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
 //    res.status(200).send(publicUrl);
-  req.files.fl.cloudStorageObject = sFlNm;
+  req.file.cloudStorageObject = sFlNm;
     blob.makePublic().then(() => {
-      req.files.fl.cloudStoragePublicUrl = getPublicUrl(sFlNm);
+      req.file.cloudStoragePublicUrl = getPublicUrl(sFlNm);
       next();
     });
 
@@ -57,14 +71,15 @@ router.post('/uploadImg', multer.single('fl'), (req, res, next) => {
 
   });
 
-  blobStream.end(req.files.fl.buffer);
+  blobStream.end(req.file.buffer);
 
-  console.log("file name should be - "+req.query.nm);
+  console.log("the file name should be - "+req.query.nm);
 });
 
 function getPublicUrl (filename) {
   return `https://storage.googleapis.com/${GCLOUD_STORAGE_BUCKET}/${filename}`;
 }
+
 
 router.get("/",function(req,res,next){
     console.log("the show is on");
