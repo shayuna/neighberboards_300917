@@ -24,14 +24,14 @@ var Storage=require("@google-cloud/storage");
 
 var storage=Storage();
 
-/*
+
 var multer = Multer({
   storage: Multer.memoryStorage(),
   limits: {
     fileSize: 5 * 1024 * 1024 // no larger than 5mb, you can change as needed.
   }
 });
-*/
+
 // A bucket is a container for objects (files).
 var bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
 
@@ -72,6 +72,7 @@ router.post('/uploadImg', multer.single('fl'), (req, res, next) => {
   });
 
   blobStream.end(req.file.buffer);
+  res.end("finished uploading photo");
 
   console.log("the file name should be - "+req.query.nm);
 });
