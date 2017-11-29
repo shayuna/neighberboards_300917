@@ -131,7 +131,7 @@ router.post("/insertData",function(req,res,next){
 */
     mongoClient.connect(url,function(err,db){
         if (!err){
-            var objToInsert={location:{type:"Point",coordinates:[parseFloat(req.body.longitude),parseFloat(req.body.latitude)]},info:req.body.info,tel:req.body.tel,dt:new Date()};
+            var objToInsert={location:{type:"Point",coordinates:[parseFloat(req.body.longitude),parseFloat(req.body.latitude)]},info:req.body.info,tel:req.body.tel,isContainPic:req.body.isContainPic,dt:new Date()};
             db.collection("neighberhoods").insert(objToInsert,function(err,result){
                 if (!err){
                     db.collection("neighberhoods").createIndex({location:"2dsphere"});
