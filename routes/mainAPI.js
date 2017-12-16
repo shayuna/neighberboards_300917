@@ -209,7 +209,7 @@ router.get("/insertQuote",function(req,res,next){
     mongoClient.connect(url,function(err,db){
         if (!err){
             if (req.query.quote && req.query.quote.trim()!=""){
-                db.collection("quotes").insert({"quote":req.query.quote},function(err,result){
+                db.collection("quotes").insert({quote:req.query.quote,author:req.query.author},function(err,result){
                     if (!err){
                         res.send("inserted quote. p.s. the quote is - "+req.query.quote);
                     }
@@ -234,11 +234,34 @@ router.get("/getQuote",function(req,res,next){
         if (!err){
             db.collection("quotes").find({}).toArray(function(err,arQuotes){
 //                res.send(JSON.stringify(arQuotes));
-                var iNum=Math.round(Math.random()*(arQuotes.length-1));
-                res.send(arQuotes[iNum].quote);
+                if (arQuotes.length>0){
+                    var iNum=Math.round(Math.random()*(arQuotes.length-1));
+                    res.send(JSON.stringify(arQuotes[iNum]));
+                }
+                else{
+                    res.send("no quotes");
+                }
                 console.log("quote num used is="+iNum);
             });
 
+        }
+        else
+        {
+            console.log ("error in findQuote - " + err.message);
+        }
+    })
+})
+router.get("/getAllQuotes",function(req,res,next){
+    mongoClient.connect(url,function(err,db){
+        if (!err){
+            db.collection("quotes").find({}).toArray(function(err,arQuotes){
+                if (!err){
+                    res.send(JSON.stringify(arQuotes));
+                }
+                else{
+                    res.send ("err in retrieving all quotes");
+                }
+            });
         }
         else
         {
