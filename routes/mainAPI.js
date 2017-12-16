@@ -20,10 +20,16 @@ router.post("/uploadImg",upload.single("fl"),function(req,res,next){
 */
 
 var Multer=require("multer");
-var Storage=require("@google-cloud/storage");
 
-var storage=Storage();
-
+try{
+    var Storage=require("@google-cloud/storage");
+    var storage=Storage();
+    // A bucket is a container for objects (files).
+    var bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
+}
+catch(err){
+    console.log("err using google-cloud/storage. supposedly because i used it from the browser and not from google appengine.err="+err);
+}
 
 var multer = Multer({
   storage: Multer.memoryStorage(),
@@ -32,8 +38,6 @@ var multer = Multer({
   }
 });
 
-// A bucket is a container for objects (files).
-var bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
 
 
 // Process the file upload and upload to Google Cloud Storage.
@@ -186,6 +190,59 @@ router.get("/removeAll",function(req,res,next){
         else
         {
             console.log ("error in removeAll - " + err.message);
+        }
+    })
+})
+router.get("/removeQuotes",function(req,res,next){
+    mongoClient.connect(url,function(err,db){
+        if (!err){
+            db.collection("quotes").remove({});
+            res.send("removed all quotes. hooray");
+        }
+        else
+        {
+            console.log ("error in removeQuotes - " + err.message);
+        }
+    })
+})
+router.get("/insertQuote",function(req,res,next){
+    mongoClient.connect(url,function(err,db){
+        if (!err){
+            if (req.query.quote && req.query.quote.trim()!=""){
+                db.collection("quotes").insert({"quote":req.query.quote},function(err,result){
+                    if (!err){
+                        res.send("inserted quote. p.s. the quote is - "+req.query.quote);
+                    }
+                    else{
+                        res.send("there is an error when inserting a quote.err="+err.message);
+                    }
+                });
+            }
+            else{
+                res.send("empty quote in insertQuote");
+            }
+          }
+        else
+        {
+            console.log ("error in insertQuote - " + err.message);
+           res.send ("failed in sending log");
+         }
+    })
+})
+router.get("/getQuote",function(req,res,next){
+    mongoClient.connect(url,function(err,db){
+        if (!err){
+            db.collection("quotes").find({}).toArray(function(err,arQuotes){
+//                res.send(JSON.stringify(arQuotes));
+                var iNum=Math.round(Math.random()*(arQuotes.length-1));
+                res.send(arQuotes[iNum].quote);
+                console.log("quote num used is="+iNum);
+            });
+
+        }
+        else
+        {
+            console.log ("error in findQuote - " + err.message);
         }
     })
 })
