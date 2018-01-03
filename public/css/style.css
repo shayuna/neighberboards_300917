@@ -2,6 +2,14 @@
     margin:1em;
     display:block;
 }
+.hdr{
+    text-align:center;
+}
+/* helper classes - start*/
 .hideMe{
     display:none;
 }
+.centerMe{
+    text-align: center;
+}
+/* helper classes - end*/

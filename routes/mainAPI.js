@@ -85,6 +85,10 @@ function getPublicUrl (filename) {
   return `https://storage.googleapis.com/${GCLOUD_STORAGE_BUCKET}/${filename}`;
 }
 
+router.get("/download*",function(req,res,next){
+    console.log("download app pg");
+    res.render("../public/jade/downloadapp.jade");
+})
 
 router.get("/",function(req,res,next){
     console.log("the show is on");
