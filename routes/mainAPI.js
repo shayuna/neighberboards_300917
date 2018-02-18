@@ -213,7 +213,7 @@ router.get("/insertQuote",function(req,res,next){
     mongoClient.connect(url,function(err,db){
         if (!err){
             if (req.query.quote && req.query.quote.trim()!=""){
-                db.collection("quotes").insert({quote:req.query.quote,author:req.query.author},function(err,result){
+                db.collection("quotes").insert({quote:req.query.quote,author:req.query.author,lng:req.query.lng},function(err,result){
                     if (!err){
                         res.send("inserted quote. p.s. the quote is - "+req.query.quote);
                     }
@@ -272,6 +272,124 @@ router.get("/getAllQuotes",function(req,res,next){
             console.log ("error in findQuote - " + err.message);
         }
     })
+})
+router.get("/updateAllQuotes",function(req,res,next){
+    mongoClient.connect(url,function(err,db){
+        if (!err){
+            db.collection("quotes").updateMany({},{$set:{lng:"en"}},function(err,obj){
+                if (!err){
+                    var sMsg=obj.result.n + " document(s) updated";
+                    res.send(sMsg);
+                    console.log(sMsg);
+                }
+                else{
+                    res.send ("err in updating all quotes");
+                }
+            });
+        }
+        else
+        {
+            console.log ("error in findQuote - " + err.message);
+        }
+    })
+})
+router.get("/getAllComponentsData",function(req,res,next){
+    mongoClient.connect(url,function(err,db){
+        if (!err){
+            db.collection("components").find({}).toArray(function(err,arComponents){
+                if (!err){
+                    res.send(JSON.stringify(arComponents));
+                }
+                else{
+                    res.send ("err in retrieving all components txt");
+                }
+            });
+        }
+        else
+        {
+            console.log ("error in getAllComponentsData - " + err.message);
+        }
+    })
+})
+router.get("/getComponentTxt",function(req,res,next){
+    mongoClient.connect(url,function(err,db){
+        if (!err){
+            db.collection("components").find({lng:req.query.lng,component:req.query.component}).toArray(function(err,arDocs){
+                if (!err){
+                    if (arDocs[0].length>0){
+//                        res.send(JSON.stringify({txt:arDocs[0].txt}));
+                        res.send(arDocs[0].txt);
+                    }
+                }
+                else{
+                    res.send("err in finding data in getComponentTxt");
+                }
+            })
+        }
+        else{
+            res.send("error when trying to connect to db in getComponentTxt");
+        }
+        
+    })
+ 
+})
+router.get("/removecomponent",function(req,res,next){
+    mongoClient.connect(url,function(err,db){
+        if (!err){
+            db.collection("components").remove({lng:req.query.lng,component:req.query.component},function(err,obj){
+                if (!err){
+                    var sMsg=obj.result.n + " document(s) removed";
+                    res.send(sMsg);
+                    console.log(sMsg);
+                }
+                else{
+                    var sMsg="err when trying to remove components in removecomponent function";
+                    console.log(sMsg);
+                    res.send(sMsg);
+                }
+            })
+        }
+        else{
+            var sMsg="err when trying to connect to mongodb in removecomponent function";
+            console.log(sMsg);
+            res.send(sMsg);
+        }
+    })
+})
+
+router.post("/insertComponentTxt",function(req,res,next){
+    /*
+        console.log("in retrieve data");
+        res.send(JSON.stringify({latitude:req.body.latitude,longitude:req.body.longitude,info:req.body.info}));
+    */
+    console.log ("in insertcomponenttxt service");
+    mongoClient.connect(url,function(err,db){
+        if (!err){
+            var objToInsert={lng:req.body.lng,component:req.body.component,txt:req.body.txt};
+            db.collection("components").insert(objToInsert,function(err,result){
+                if (!err){
+                    console.log ("component's text inserted successfully hooray. inserted obj id = "+objToInsert._id);
+                    res.send(objToInsert._id);
+                }
+                else{
+                    console.log ("error when inserting component's text")
+                }
+
+            })
+        }
+        else
+        {
+            console.log ("error in insertComponentTxt - " + err.message);
+        }
+    })
+})
+
+router.get("/insertcomponenttext",function(req,res,next){
+    console.log("in insertcomponenttext pg");
+    res.render("../public/jade/insertcomponenttext.jade");
+//    console.log(path.resolve("../public/imgs","blabla.jpg"));
+//    console.log("the __dirname name env contains - "+path.resolve(__dirname));
+//    console.log("the __filename env contains - "+path.resolve(__filename));
 })
 router.get("/*",function(req,res,next){
     res.end ("in default pg");

@@ -1,0 +1,14 @@
+doctype html
+html
+    head
+        title insert component text
+        meta(charset="utf-8")
+        script(src="./public/js/vendors/jquery-3.2.1.min.js")
+        link(rel="stylesheet",href="../public/css/style.css")
+    body
+        form#eForm(method="post",action="./insertcomponenttxt",target="eIframe")
+            input#eLng(name="lng",class="fld" placeholder="language")
+            input#eComponent(name="component",class="fld" placeholder="component")
+            textarea#eTxt(name="txt",placeholder="הכנס את הטקסט המתאים לרכיב ?",class="fld")
+            input#bAdd(type="submit",value="הוסף טקסט לרכיב",class="fld")
+            iframe#eIframe(name="eIframe",class="hideMe")

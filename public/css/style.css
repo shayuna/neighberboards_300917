@@ -5,6 +5,20 @@
 .hdr{
     text-align:center;
 }
+#eForm{
+    height:80%;
+    width:50%;
+    margin:auto;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    align-items:center;
+    border:1px solid black;
+}
+.fld{
+    width:50%;
+    margin:1em;
+}
 /* helper classes - start*/
 .hideMe{
     display:none;
