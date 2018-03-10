@@ -16,6 +16,6 @@ runtime: nodejs
 env: flex
 
 env_variables:
-    GCLOUD_STORAGE_BUCKET: neighberboards-192420.appspot.com
+    GCLOUD_STORAGE_BUCKET: sixth-env-197608.appspot.com
 
 # [END app_yaml]
