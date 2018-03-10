@@ -316,9 +316,12 @@ router.get("/getComponentTxt",function(req,res,next){
         if (!err){
             db.collection("components").find({lng:req.query.lng,component:req.query.component}).toArray(function(err,arDocs){
                 if (!err){
-                    if (arDocs[0].length>0){
+                    if (arDocs.length>0){
 //                        res.send(JSON.stringify({txt:arDocs[0].txt}));
                         res.send(arDocs[0].txt);
+                    }
+                    else{
+                        res.send("");
                     }
                 }
                 else{
