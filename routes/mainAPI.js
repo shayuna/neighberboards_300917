@@ -236,7 +236,7 @@ router.get("/insertQuote",function(req,res,next){
 router.get("/getQuote",function(req,res,next){
     mongoClient.connect(url,function(err,db){
         if (!err){
-            db.collection("quotes").find({}).toArray(function(err,arQuotes){
+            db.collection("quotes").find({lng:req.query.lng}).toArray(function(err,arQuotes){
 //                res.send(JSON.stringify(arQuotes));
                 if (arQuotes.length>0){
                     var iNum=Math.round(Math.random()*(arQuotes.length-1));
